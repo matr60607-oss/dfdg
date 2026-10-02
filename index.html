@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Аренда квартир посуточно. Найдите удобную квартиру для проживания.">
+    <title>Квартиры посуточно</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container header-inner">
+        <a href="#" class="logo">
+            <span class="logo-icon">⌂</span>
+            <span>КвартиGo</span>
+        </a>
+
+        <nav class="nav">
+            <a href="#apartments">Квартиры</a>
+            <a href="#advantages">Преимущества</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+
+        <button class="owner-btn" onclick="openOwnerModal()">
+            Сдать квартиру
+        </button>
+    </div>
+</header>
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+            <div class="hero-text">
+                <span class="hero-label">ПОСУТОЧНАЯ АРЕНДА</span>
+
+                <h1>
+                    Найдите квартиру,<br>
+                    в которой хочется остаться
+                </h1>
+
+                <p>
+                    Уютные квартиры для отдыха, командировок
+                    и путешествий.
+                </p>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="search-box">
+
+                <div class="search-field">
+                    <label>Город</label>
+                    <select id="city">
+                        <option value="all">Все города</option>
+                        <option value="Петропавловск">Петропавловск</option>
+                        <option value="Астана">Астана</option>
+                        <option value="Алматы">Алматы</option>
+                    </select>
+                </div>
+
+                <div class="search-field">
+                    <label>Заезд</label>
+                    <input type="date" id="checkin">
+                </div>
+
+                <div class="search-field">
+                    <label>Выезд</label>
+                    <input type="date" id="checkout">
+                </div>
+
+                <div class="search-field">
+                    <label>Гости</label>
+                    <select id="guests">
+                        <option value="1">1 гость</option>
+                        <option value="2">2 гостя</option>
+                        <option value="3">3 гостя</option>
+                        <option value="4">4 гостя</option>
+                        <option value="5">5 гостей</option>
+                        <option value="6">6 гостей</option>
+                    </select>
+                </div>
+
+                <button class="search-btn" onclick="searchApartments()">
+                    Найти
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- APARTMENTS -->
+    <section class="apartments-section" id="apartments">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <span class="section-label">НАШИ КВАРТИРЫ</span>
+                    <h2>Выберите подходящий вариант</h2>
+                </div>
+
+                <div class="sort-wrapper">
+                    <label for="sort">Сортировка:</label>
+                    <select id="sort" onchange="sortApartments()">
+                        <option value="default">По популярности</option>
+                        <option value="cheap">Сначала дешевле</option>
+                        <option value="expensive">Сначала дороже</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter active" data-filter="all">
+                    Все
+                </button>
+
+                <button class="filter" data-filter="1">
+                    1-комнатные
+                </button>
+
+                <button class="filter" data-filter="2">
+                    2-комнатные
+                </button>
+
+                <button class="filter" data-filter="3">
+                    3-комнатные
+                </button>
+            </div>
+
+            <div class="apartments-grid" id="apartmentsGrid">
+
+                <!-- Apartment 1 -->
+                <article class="apartment-card"
+                         data-city="Петропавловск"
+                         data-rooms="1"
+                         data-price="12000">
+
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80"
+                             alt="Современная квартира">
+
+                        <span class="apartment-badge">Популярное</span>
+
+                        <button class="favorite" onclick="toggleFavorite(this)">
+                            ♡
+                        </button>
+                    </div>
+
+                    <div class="apartment-info">
+
+                        <div class="apartment-top">
+                            <span class="apartment-type">
+                                1-комнатная
+                            </span>
+
+                            <span class="rating">
+                                ★ 4.9
+                            </span>
+                        </div>
+
+                        <h3>Уютная квартира в центре</h3>
+
+                        <p class="location">
+                            📍 Петропавловск, центр
+                        </p>
+
+                        <div class="features">
+                            <span>👤 до 2 гостей</span>
+                            <span>🛏 1 кровать</span>
+                            <span>📶 Wi-Fi</span>
+                        </div>
+
+                        <div class="card-bottom">
+                            <div class="price">
+                                <strong>12 000 ₸</strong>
+                                <span>/ сутки</span>
+                            </div>
+
+                            <button class="details-btn"
+                                    onclick="openApartment(1)">
+                                Подробнее
+                            </button>
+                        </div>
+
+                    </div>
+                </article>
+
+
+                <!-- Apartment 2 -->
+                <article class="apartment-card"
+                         data-city="Астана"
+                         data-rooms="2"
+                         data-price="18000">
+
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80"
+                             alt="Двухкомнатная квартира">
+
+                        <span class="apartment-badge new">
+                            Новинка
+                        </span>
+
+                        <button class="favorite" onclick="toggleFavorite(this)">
+                            ♡
+                        </button>
+                    </div>
+
+                    <div class="apartment-info">
+
+                        <div class="apartment-top">
+                            <span class="apartment-type">
+                                2-комнатная
+                            </span>
+
+                            <span class="rating">
+                                ★ 4.8
+                            </span>
+                        </div>
+
+                        <h3>Стильная квартира возле центра</h3>
+
+                        <p class="location">
+                            📍 Астана, левый берег
+                        </p>
+
+                        <div class="features">
+                            <span>👤 до 4 гостей</span>
+                            <span>🛏 2 кровати</span>
+                            <span>📶 Wi-Fi</span>
+                        </div>
+
+                        <div class="card-bottom">
+                            <div class="price">
+                                <strong>18 000 ₸</strong>
+                                <span>/ сутки</span>
+                            </div>
+
+                            <button class="details-btn"
+                                    onclick="openApartment(2)">
+                                Подробнее
+                            </button>
+                        </div>
+
+                    </div>
+                </article>
+
+
+                <!-- Apartment 3 -->
+                <article class="apartment-card"
+                         data-city="Алматы"
+                         data-rooms="3"
+                         data-price="25000">
+
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80"
+                             alt="Трехкомнатная квартира">
+
+                        <span class="apartment-badge premium">
+                            Premium
+                        </span>
+
+                        <button class="favorite" onclick="toggleFavorite(this)">
+                            ♡
+                        </button>
+                    </div>
+
+                    <div class="apartment-info">
+
+                        <div class="apartment-top">
+                            <span class="apartment-type">
+                                3-комнатная
+                            </span>
+
+                            <span class="rating">
+                                ★ 5.0
+                            </span>
+                        </div>
+
+                        <h3>Большая квартира для семьи</h3>
+
+                        <p class="location">
+                            📍 Алматы, Медеуский район
+                        </p>
+
+                        <div class="features">
+                            <span>👤 до 6 гостей</span>
+                            <span>🛏 3 кровати</span>
+                            <span>📶 Wi-Fi</span>
+                        </div>
+
+                        <div class="card-bottom">
+                            <div class="price">
+                                <strong>25 000 ₸</strong>
+                                <span>/ сутки</span>
+                            </div>
+
+                            <button class="details-btn"
+                                    onclick="openApartment(3)">
+                                Подробнее
+                            </button>
+                        </div>
+
+                    </div>
+                </article>
+
+
+                <!-- Apartment 4 -->
+                <article class="apartment-card"
+                         data-city="Петропавловск"
+                         data-rooms="2"
+                         data-price="16000">
+
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80"
+                             alt="Квартира с современным интерьером">
+
+                        <button class="favorite" onclick="toggleFavorite(this)">
+                            ♡
+                        </button>
+                    </div>
+
+                    <div class="apartment-info">
+
+                        <div class="apartment-top">
+                            <span class="apartment-type">
+                                2-комнатная
+                            </span>
+
+                            <span class="rating">
+                                ★ 4.7
+                            </span>
+                        </div>
+
+                        <h3>Светлая квартира для отдыха</h3>
+
+                        <p class="location">
+                            📍 Петропавловск, 20-й микрорайон
+                        </p>
+
+                        <div class="features">
+                            <span>👤 до 4 гостей</span>
+                            <span>🛏 2 кровати</span>
+                            <span>📺 Smart TV</span>
+                        </div>
+
+                        <div class="card-bottom">
+                            <div class="price">
+                                <strong>16 000 ₸</strong>
+                                <span>/ сутки</span>
+                            </div>
+
+                            <button class="details-btn"
+                                    onclick="openApartment(4)">
+                                Подробнее
+                            </button>
+                        </div>
+
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="no-results" id="noResults">
+                <div>🏠</div>
+                <h3>Квартиры не найдены</h3>
+                <p>Попробуйте изменить параметры поиска.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ADVANTAGES -->
+    <section class="advantages" id="advantages">
+        <div class="container">
+
+            <div class="section-heading center">
+                <span class="section-label">ПОЧЕМУ МЫ</span>
+                <h2>Снимать квартиру стало проще</h2>
+                <p>
+                    Мы делаем поиск и бронирование жилья максимально удобными.
+                </p>
+            </div>
+
+            <div class="advantages-grid">
+
+                <div class="advantage">
+                    <div class="advantage-icon">🔎</div>
+                    <h3>Большой выбор</h3>
+                    <p>
+                        Квартиры разных размеров и ценовых категорий.
+                    </p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">🛡️</div>
+                    <h3>Проверенное жильё</h3>
+                    <p>
+                        Актуальные фотографии и подробная информация.
+                    </p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">⚡</div>
+                    <h3>Быстрое бронирование</h3>
+                    <p>
+                        Найдите подходящую квартиру за несколько минут.
+                    </p>
+                </div>
+
+                <div class="advantage">
+                    <div class="advantage-icon">💬</div>
+                    <h3>Поддержка</h3>
+                    <p>
+                        Мы готовы помочь с любыми вопросами.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- OWNER CTA -->
+    <section class="owner-section">
+        <div class="container owner-content">
+
+            <div>
+                <span class="section-label">ВЛАДЕЛЬЦАМ</span>
+                <h2>Есть свободная квартира?</h2>
+                <p>
+                    Разместите своё объявление и находите гостей.
+                </p>
+            </div>
+
+            <button class="owner-big-btn" onclick="openOwnerModal()">
+                Разместить квартиру →
+            </button>
+
+        </div>
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="footer" id="contacts">
+    <div class="container footer-grid">
+
+        <div>
+            <a href="#" class="logo footer-logo">
+                <span class="logo-icon">⌂</span>
+                <span>КвартиGo</span>
+            </a>
+
+            <p>
+                Удобная аренда квартир посуточно.
+            </p>
+        </div>
+
+        <div>
+            <h4>Навигация</h4>
+            <a href="#apartments">Квартиры</a>
+            <a href="#advantages">Преимущества</a>
+            <a href="#contacts">Контакты</a>
+        </div>
+
+        <div>
+            <h4>Контакты</h4>
+            <a href="tel:+77000000000">+7 (700) 000-00-00</a>
+            <a href="mailto:info@kvartigo.kz">info@kvartigo.kz</a>
+        </div>
+
+        <div>
+            <h4>Мы в соцсетях</h4>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">WhatsApp</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 КвартиGo. Все права защищены.
+    </div>
+</footer>
+
+
+<!-- APARTMENT MODAL -->
+<div class="modal" id="apartmentModal">
+    <div class="modal-content apartment-modal">
+
+        <button class="close-modal" onclick="closeModal('apartmentModal')">
+            ×
+        </button>
+
+        <img id="modalImage" src="" alt="Квартира">
+
+        <div class="modal-info">
+            <span class="section-label">КВАРТИРА</span>
+
+            <h2 id="modalTitle"></h2>
+
+            <p id="modalLocation"></p>
+
+            <div class="modal-price">
+                <strong id="modalPrice"></strong>
+                <span>/ сутки</span>
+            </div>
+
+            <p>
+                Уютная квартира с современным ремонтом.
+                Есть всё необходимое для комфортного проживания.
+            </p>
+
+            <div class="modal-features">
+                <span>📶 Wi-Fi</span>
+                <span>📺 Smart TV</span>
+                <span>🍳 Кухня</span>
+                <span>🚿 Душ</span>
+                <span>🧺 Стиральная машина</span>
+            </div>
+
+            <button class="booking-btn" onclick="openBookingModal()">
+                Забронировать
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- BOOKING MODAL -->
+<div class="modal" id="bookingModal">
+    <div class="modal-content small-modal">
+
+        <button class="close-modal" onclick="closeModal('bookingModal')">
+            ×
+        </button>
+
+        <span class="section-label">БРОНИРОВАНИЕ</span>
+        <h2>Оставить заявку</h2>
+
+        <form id="bookingForm">
+
+            <label>Ваше имя</label>
+            <input type="text" id="bookingName"
+                   placeholder="Введите имя" required>
+
+            <label>Телефон</label>
+            <input type="tel" id="bookingPhone"
+                   placeholder="+7 (___) ___-__-__" required>
+
+            <label>Комментарий</label>
+            <textarea id="bookingComment"
+                      placeholder="Например: приеду после 20:00"></textarea>
+
+            <button type="submit" class="booking-btn">
+                Отправить заявку
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- OWNER MODAL -->
+<div class="modal" id="ownerModal">
+    <div class="modal-content small-modal">
+
+        <button class="close-modal" onclick="closeModal('ownerModal')">
+            ×
+        </button>
+
+        <span class="section-label">ВЛАДЕЛЬЦАМ</span>
+        <h2>Разместить квартиру</h2>
+
+        <p>
+            Оставьте свои контакты, и мы свяжемся с вами.
+        </p>
+
+        <form id="ownerForm">
+
+            <label>Ваше имя</label>
+            <input type="text" placeholder="Введите имя" required>
+
+            <label>Телефон</label>
+            <input type="tel"
+                   placeholder="+7 (___) ___-__-__"
+                   required>
+
+            <label>Город</label>
+            <input type="text"
+                   placeholder="Например, Петропавловск"
+                   required>
+
+            <button type="submit" class="booking-btn">
+                Отправить
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+<div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMessage">
+        Готово!
+    </span>
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
