@@ -1,0 +1,382 @@
+// ==========================================
+// ДАННЫЕ КВАРТИР
+// ==========================================
+
+const apartments = {
+    1: {
+        title: "Уютная квартира в центре",
+        location: "📍 Петропавловск, центр",
+        price: "12 000 ₸",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=85"
+    },
+
+    2: {
+        title: "Стильная квартира возле центра",
+        location: "📍 Астана, левый берег",
+        price: "18 000 000 000 ₸",
+        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
+    },
+
+    3: {
+        title: "Большая квартира для семьи",
+        location: "📍 Алматы, Медеуский район",
+        price: "25 000 000 000 ₸",
+        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85"
+    },
+
+    4: {
+        title: "Светлая квартира для отдыха",
+        location: "📍 Петропавловск, 20-й микрорайон",
+        price: "16 000 000 000 ₸",
+        image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85"
+    }
+};
+
+
+// ==========================================
+// ПОИСК
+// ==========================================
+
+function searchApartments() {
+
+    const city = document.getElementById("city").value;
+    const checkin = document.getElementById("checkin").value;
+    const checkout = document.getElementById("checkout").value;
+
+    if (checkin && checkout) {
+
+        const start = new Date(checkin);
+        const end = new Date(checkout);
+
+        if (end <= start) {
+            showToast("Дата выезда должна быть позже даты заезда");
+            return;
+        }
+    }
+
+    const cards = document.querySelectorAll(".apartment-card");
+
+    let visible = 0;
+
+    cards.forEach(card => {
+
+        const cardCity = card.dataset.city;
+
+        let show = true;
+
+        if (city !== "all" && cardCity !== city) {
+            show = false;
+        }
+
+        card.style.display = show ? "" : "none";
+
+        if (show) {
+            visible++;
+        }
+    });
+
+    document.getElementById("noResults").style.display =
+        visible === 0 ? "block" : "none";
+
+    document.getElementById("apartments").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+
+// ==========================================
+// ФИЛЬТР КОМНАТ
+// ==========================================
+
+const filters = document.querySelectorAll(".filter");
+
+filters.forEach(filter => {
+
+    filter.addEventListener("click", () => {
+
+        filters.forEach(item => {
+            item.classList.remove("active");
+        });
+
+        filter.classList.add("active");
+
+        const selectedFilter = filter.dataset.filter;
+
+        const cards = document.querySelectorAll(".apartment-card");
+
+        let visible = 0;
+
+        cards.forEach(card => {
+
+            const rooms = card.dataset.rooms;
+
+            if (
+                selectedFilter === "all" ||
+                rooms === selectedFilter
+            ) {
+                card.style.display = "";
+                visible++;
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+
+        document.getElementById("noResults").style.display =
+            visible === 0 ? "block" : "none";
+    });
+
+});
+
+
+// ==========================================
+// СОРТИРОВКА
+// ==========================================
+
+function sortApartments() {
+
+    const grid = document.getElementById("apartmentsGrid");
+
+    const cards = [...grid.querySelectorAll(".apartment-card")];
+
+    const sort = document.getElementById("sort").value;
+
+    if (sort === "cheap") {
+
+        cards.sort((a, b) => {
+            return Number(a.dataset.price) - Number(b.dataset.price);
+        });
+
+    } else if (sort === "expensive") {
+
+        cards.sort((a, b) => {
+            return Number(b.dataset.price) - Number(a.dataset.price);
+        });
+    }
+
+    cards.forEach(card => {
+        grid.appendChild(card);
+    });
+}
+
+
+// ==========================================
+// ИЗБРАННОЕ
+// ==========================================
+
+function toggleFavorite(button) {
+
+    button.classList.toggle("active");
+
+    if (button.classList.contains("active")) {
+        button.innerHTML = "♥";
+        showToast("Квартира добавлена в избранное");
+    } else {
+        button.innerHTML = "♡";
+        showToast("Квартира удалена из избранного");
+    }
+}
+
+
+// ==========================================
+// ОТКРЫТИЕ КВАРТИРЫ
+// ==========================================
+
+let currentApartment = null;
+
+function openApartment(id) {
+
+    const apartment = apartments[id];
+
+    if (!apartment) {
+        return;
+    }
+
+    currentApartment = id;
+
+    document.getElementById("modalImage").src = apartment.image;
+    document.getElementById("modalTitle").textContent = apartment.title;
+    document.getElementById("modalLocation").textContent = apartment.location;
+    document.getElementById("modalPrice").textContent = apartment.price;
+
+    openModal("apartmentModal");
+}
+
+
+// ==========================================
+// МОДАЛЬНЫЕ ОКНА
+// ==========================================
+
+function openModal(id) {
+
+    const modal = document.getElementById(id);
+
+    if (modal) {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+
+function closeModal(id) {
+
+    const modal = document.getElementById(id);
+
+    if (modal) {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+    }
+}
+
+
+function openBookingModal() {
+
+    closeModal("apartmentModal");
+
+    setTimeout(() => {
+        openModal("bookingModal");
+    }, 150);
+}
+
+
+function openOwnerModal() {
+    openModal("ownerModal");
+}
+
+
+// ==========================================
+// ЗАКРЫТИЕ ПО КЛИКУ ВНЕ ОКНА
+// ==========================================
+
+document.querySelectorAll(".modal").forEach(modal => {
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+    });
+
+});
+
+
+// ==========================================
+// ESC
+// ==========================================
+
+document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.classList.remove("active");
+        });
+
+        document.body.style.overflow = "";
+    }
+
+});
+
+
+// ==========================================
+// ФОРМА БРОНИРОВАНИЯ
+// ==========================================
+
+document.getElementById("bookingForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("bookingName").value.trim();
+    const phone = document.getElementById("bookingPhone").value.trim();
+
+    if (!name || !phone) {
+        showToast("Заполните обязательные поля");
+        return;
+    }
+
+    closeModal("bookingModal");
+
+    this.reset();
+
+    showToast("Заявка отправлена! Мы свяжемся с вами.");
+});
+
+
+// ==========================================
+// ФОРМА ВЛАДЕЛЬЦА
+// ==========================================
+
+document.getElementById("ownerForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    closeModal("ownerModal");
+
+    this.reset();
+
+    showToast("Спасибо! Мы свяжемся с вами.");
+});
+
+
+// ==========================================
+// УВЕДОМЛЕНИЯ
+// ==========================================
+
+let toastTimer;
+
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+    const messageElement = document.getElementById("toastMessage");
+
+    messageElement.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+
+// ==========================================
+// ДАТЫ
+// ==========================================
+
+const today = new Date();
+
+const todayString =
+    today.toISOString().split("T")[0];
+
+const checkin = document.getElementById("checkin");
+const checkout = document.getElementById("checkout");
+
+checkin.min = todayString;
+checkout.min = todayString;
+
+checkin.addEventListener("change", () => {
+
+    checkout.min = checkin.value;
+
+    if (
+        checkout.value &&
+        checkout.value <= checkin.value
+    ) {
+        checkout.value = "";
+    }
+});
+
+
+// ==========================================
+// НАЧАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    console.log("КвартиGo запущен");
+
+});
